@@ -43,7 +43,7 @@ if (typeof window.CCTools === 'undefined' || typeof window.CCTools.init === 'und
 			return new Promise((resolve, reject) => {
 				const script = document.createElement('script');
 				// ブラウザのキャッシュ対策としてクエリパラメータに現在時刻を付与
-				script.src = this.baseUrl + filename + '?t=' + new Date().getTime();
+				script.src = this.baseUrl + filename + '?t=' + new Date().toISOString().replace(/[-:T.Z]/g, '').slice(0, 14);
 				
 				script.onload = () => {
 					console.log(`[CCTools] モジュール読み込み成功: ${filename}`);
