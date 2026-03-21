@@ -46,12 +46,12 @@
 			if (Math.random() < 0.1) choices.push('Cursed Finger', 'Elder Frenzy');
 			if (Math.random() < 0.003) choices.push('Free Sugar Lump');
 			if (Math.random() < 0.1) choices = ['Blab'];
-			return '【' + choose(choices) + '】'; // バックファイア(失敗)を分かりやすく強調
+			return choose(choices);
 		}
 	}
 
 	/**
-	 * Force the Hand of Fate (手相占い) の予測テーブルを生成するメインロジック
+	 * Force the Hand of Fate の予測テーブルを生成するメインロジック
 	 * 内部乱数(seedrandom)を使用して、次から10回分の魔法の結果をシミュレートします。
 	 */
 	function getPrediction() {
@@ -69,17 +69,17 @@
 
 		let html = `
 			<p>
-				<h3 style="color:#cccccc; text-align:center; padding-top: 5px;">Hand of Fate (手相占い) 予測</h3>
+				<h3 style="color:#cccccc; text-align:center; padding-top: 5px;">Force the Hand of Fate 予測</h3>
 				<table style="margin:auto; width:100%; text-align:center; font-size:12px;">
 					<tr>
 						<th></th>
-						<th><span style="font-weight:bold; color:${randcounter === 0 ? '#ffcc00' : '#cccccc'};">Other Seasons</span></th>
-						<th><span style="font-weight:bold; color:${randcounter === 0 ? '#cccccc' : '#ffcc00'};">Easter / Valentine</span></th>
+						<th style="text-align:center;"><span style="font-weight:bold; color:${randcounter === 0 ? '#ffcc00' : '#cccccc'};">Other Seasons</span></th>
+						<th style="text-align:center;"><span style="font-weight:bold; color:${randcounter === 0 ? '#cccccc' : '#ffcc00'};">Easter / Valentine</span></th>
 					</tr>
 		`;
 
 		for (let i = 1; i <= 10; i++) {
-			html += `<tr><td style="color:#cccccc;">${i}</td>`;
+			html += `<tr><td style="color:#cccccc; text-align:right; width:20px; padding-right:10px;">${i}</td>`;
 			
 			for (let j = 0; j <= 1; j++) {
 				// クッキークリッカー標準の乱数シード設定（グローバルのMath.randomを一時的に上書き）
@@ -98,7 +98,7 @@
 					color = (randcounter === j) ? '#ff6666' : '#ff9999';
 				}
 				
-				html += `<td style="margin:1px; border-bottom:1px solid #444; padding:2px; color:${color};">${spellResult}</td>`;
+				html += `<td style="margin:1px; border-bottom:1px solid #444; padding:2px; text-align:left; color:${color};">${spellResult}</td>`;
 			}
 			html += '</tr>';
 		}
@@ -123,8 +123,7 @@
 			panel = document.createElement('div');
 			panel.id = "cctools-fthof-panel";
 			panel.className = "framed note";
-			// アイコンの幅に合わせつつ、左に微調整（leftとwidthの数値で調整可能です）
-			panel.style.cssText = 'margin:8px auto; position:relative; left:0px; width:540px; max-width:95%; padding-bottom: 8px; box-sizing:border-box;';
+			panel.style.cssText = 'margin:8px auto; position:relative; left:0px; width:420px; max-width:95%; padding-bottom: 8px; box-sizing:border-box;';
 			grimoireContent.appendChild(panel);
 		}
 		panel.innerHTML = getPrediction();
