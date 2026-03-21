@@ -6,8 +6,7 @@ if (typeof window.CCTools === 'undefined' || typeof window.CCTools.init === 'und
 			'setting.js',
 			'autoclicker.js',
 			'autogolden.js',
-			'fthof.js',
-			'goldenoverlay.js'
+			'fthof.js'
 		],
 		
 		// 各ツールの設定値を保持するオブジェクト

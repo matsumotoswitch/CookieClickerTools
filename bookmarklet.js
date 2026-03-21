@@ -5,6 +5,6 @@ javascript:(function(){
     window.CCTools.baseUrl = baseUrl;
 
     var s = document.createElement('script');
-    s.src = baseUrl + 'main.js';
+    s.src = baseUrl + 'main.js?t=' + new Date().getTime();
     document.head.appendChild(s);
 })();
