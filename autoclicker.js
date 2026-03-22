@@ -24,13 +24,13 @@
 	 * 既存のタイマーがあればクリアし、設定されたCPSに基づく間隔でクリックを実行します。
 	 */
 	function startBigCookieClicker() {
-		stopBigCookieClicker(); // 二重起動を防ぐため既存のタイマーをクリア
+		stopBigCookieClicker();
 		const cps = CCTools.config['bigCookieCps'];
 		if (cps <= 0) return;
 		
 		const intervalMs = 1000 / cps; // CPSからインターバル(ミリ秒)を計算
 		bigCookieInterval = setInterval(() => {
-			Game.ClickCookie(); // クッキークリッカー標準のクリック関数
+			Game.ClickCookie();
 		}, intervalMs);
 	}
 
@@ -44,7 +44,7 @@
 		}
 	}
 
-	// 再読み込み時などに、設定がONになっていれば起動する
+	// 初期化
 	if (CCTools.config['autoBigCookie']) {
 		startBigCookieClicker();
 	}

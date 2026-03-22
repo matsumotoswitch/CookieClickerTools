@@ -1,7 +1,7 @@
 // main.js
-if (typeof window.CCTools === 'undefined' || typeof window.CCTools.init === 'undefined') {
+if (!window.CCTools || !window.CCTools.init) {
 	window.CCTools = Object.assign(window.CCTools || {}, {
-		// 読み込むモジュールのリスト（後から autoclicker.js などをここに追加します）
+		// 読み込むモジュールのリスト（後から新しい機能のjsファイルをここに追加します）
 		modules: [
 			'setting.js',
 			'autoclicker.js',

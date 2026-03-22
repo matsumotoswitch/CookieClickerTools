@@ -2,7 +2,7 @@
 (function() {
 	let fthofInterval = null;
 
-	// 予測表示のON/OFFトグル設定を追加
+	// 予測表示のON/OFFトグル設定
 	CCTools.addSetting('showFtHoF', 'Force the Hand of Fate 予測表示', 'toggle', true, (isActive) => {
 		if (isActive) {
 			startFthofPredictor();
@@ -26,13 +26,10 @@
 	 * @returns {string} 魔法の効果名
 	 */
 	function simulateSpellResult(isSuccess, seasonBounces) {
-		// 内部の基本消費
-		Math.random(); 
-		Math.random(); 
-		// 季節等による消費シミュレート
-		for (let k = 0; k < seasonBounces; k++) Math.random(); 
+		// 乱数消費のシミュレート
+		for (let k = 0; k < 2 + seasonBounces; k++) Math.random(); 
 		
-		let choices = [];
+		let choices;
 		if (isSuccess) {
 			choices = ['Frenzy', 'Lucky'];
 			if (!Game.hasBuff('Dragonflight')) choices.push('Click Frenzy');
@@ -40,14 +37,13 @@
 			if (Game.BuildingsOwned >= 10 && Math.random() < 0.25) choices.push('Building Special');
 			if (Math.random() < 0.15) choices = ['Cookie Storm Drop'];
 			if (Math.random() < 0.0001) choices.push('Free Sugar Lump');
-			return choose(choices);
 		} else {
 			choices = ['Clot', 'Ruin Cookies'];
 			if (Math.random() < 0.1) choices.push('Cursed Finger', 'Elder Frenzy');
 			if (Math.random() < 0.003) choices.push('Free Sugar Lump');
 			if (Math.random() < 0.1) choices = ['Blab'];
-			return choose(choices);
 		}
+		return choose(choices);
 	}
 
 	/**
@@ -64,8 +60,10 @@
 		const M = tower.minigame;
 		const spell = M.spells['hand of fate'];
 		const spellTotal = M.spellsCastTotal;
-		const isSpecialSeason = (Game.season === 'easter' || Game.season === 'valentines');
-		const randcounter = isSpecialSeason ? 1 : 0;
+		const randcounter = (Game.season === 'easter' || Game.season === 'valentines') ? 1 : 0;
+		
+		// failChanceはシードに依存しないため、ループ前に1度だけ計算する
+		const failChance = M.getFailChance(spell);
 
 		let html = `
 			<p>
@@ -82,21 +80,15 @@
 			html += `<tr><td style="color:#cccccc; text-align:right; width:20px; padding-right:10px;">${i}</td>`;
 			
 			for (let j = 0; j <= 1; j++) {
-				// クッキークリッカー標準の乱数シード設定（グローバルのMath.randomを一時的に上書き）
+				// 乱数シードの設定
 				Math.seedrandom(Game.seed + '/' + (spellTotal + i - 1));
 				
-				// 成功判定 (元のスクリプトの isFail のロジック。条件を満たせば成功)
-				let failChance = M.getFailChance(spell);
 				const isSuccess = Math.random() < (1 - failChance);
-
 				const spellResult = simulateSpellResult(isSuccess, j);
 
-				let color = '';
-				if (isSuccess) {
-					color = (randcounter === j) ? '#ffcc00' : '#cccccc';
-				} else {
-					color = (randcounter === j) ? '#ff6666' : '#ff9999';
-				}
+				const color = isSuccess 
+					? (randcounter === j ? '#ffcc00' : '#cccccc')
+					: (randcounter === j ? '#ff6666' : '#ff9999');
 				
 				html += `<td style="margin:1px; border-bottom:1px solid #444; padding:2px; text-align:left; color:${color};">${spellResult}</td>`;
 			}
@@ -105,7 +97,7 @@
 
 		html += '</table></p>';
 
-		// 処理が終わったらグローバルの乱数を元の状態（ランダム）に戻す
+		// 乱数シードのリセット
 		Math.seedrandom();
 		
 		return html;
@@ -135,12 +127,7 @@
 	function startFthofPredictor() {
 		if (fthofInterval) return;
 		updatePanel();
-		fthofInterval = setInterval(() => {
-			// ミニゲーム画面が開いている時だけ更新処理を行う
-			if (document.getElementById("grimoireContent")) {
-				updatePanel();
-			}
-		}, 1000);
+		fthofInterval = setInterval(updatePanel, 1000);
 	}
 
 	/**
@@ -157,7 +144,7 @@
 		}
 	}
 
-	// 再読み込み時などに、設定がONになっていれば起動する
+	// 初期化
 	if (CCTools.config['showFtHoF']) {
 		startFthofPredictor();
 	}

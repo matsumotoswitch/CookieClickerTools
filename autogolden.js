@@ -21,15 +21,12 @@
 			if (!shimmerInterval) {
 				// 500ミリ秒ごとに画面上のshimmer（ゴールデンクッキーやトナカイ）を確認してクリック
 				shimmerInterval = setInterval(() => {
-					if (Game.shimmers.length > 0) {
-						// shimmer.pop() は配列要素を削除するため、要素ズレを防ぐべく後ろからループ処理します
-						for (let i = Game.shimmers.length - 1; i >= 0; i--) {
-							const shimmer = Game.shimmers[i];
-							if (shimmer.type === 'golden' && CCTools.config['autoGoldenCookie']) {
-								shimmer.pop();
-							} else if (shimmer.type === 'reindeer' && CCTools.config['autoReindeer']) {
-								shimmer.pop();
-							}
+					// 要素ズレを防ぐべく後ろからループ処理
+					for (let i = Game.shimmers.length - 1; i >= 0; i--) {
+						const type = Game.shimmers[i].type;
+						if ((type === 'golden' && CCTools.config['autoGoldenCookie']) || 
+						    (type === 'reindeer' && CCTools.config['autoReindeer'])) {
+							Game.shimmers[i].pop();
 						}
 					}
 				}, 500);
@@ -42,6 +39,6 @@
 		}
 	}
 
-	// 再読み込み時などに状態を復元
+	// 初期化
 	updateShimmerClicker();
 })();

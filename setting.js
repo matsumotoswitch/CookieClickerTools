@@ -130,36 +130,28 @@
 	 * 生成されたボタンや入力ボックスの幅を、最も広いものに合わせて統一します
 	 */
 	function alignElementWidths(toggleButtons, inputElements) {
-		let maxWidth = 0;
-		if (toggleButtons.length > 0) {
-			toggleButtons.forEach(btn => {
-				if (btn.offsetWidth > maxWidth) maxWidth = btn.offsetWidth;
-			});
-			maxWidth += 30; // ON/OFFの文字数変化に対応する余白
-		}
-		
-		if (maxWidth > 0 || CCTools.maxToggleButtonWidth) {
-			CCTools.maxToggleButtonWidth = Math.max(CCTools.maxToggleButtonWidth || 0, maxWidth);
+		if (toggleButtons.length === 0) return;
 
-			toggleButtons.forEach(btn => {
-				btn.style.boxSizing = 'border-box';
-				btn.style.width = CCTools.maxToggleButtonWidth + 'px';
-				btn.style.textAlign = 'right';
-				btn.style.fontFamily = '"Merriweather", Georgia, serif';
-			});
-			
-			inputElements.forEach(input => {
-				input.style.boxSizing = 'border-box';
-				input.style.width = CCTools.maxToggleButtonWidth + 'px';
-				input.style.textAlign = 'right';
-				input.style.fontFamily = '"Merriweather", Georgia, serif';
-			});
-		}
+		// 全ボタンの中から最大幅を取得し、ON/OFFの文字数変化に対応する余白を追加
+		const currentMax = Math.max(...toggleButtons.map(btn => btn.offsetWidth)) + 30;
+		// 過去の最大幅を記憶しておき、ボタンが短くなるのを防ぐ
+		CCTools.maxToggleButtonWidth = Math.max(CCTools.maxToggleButtonWidth || 0, currentMax);
+
+		// 共通のスタイル定義
+		const sharedStyle = {
+			boxSizing: 'border-box',
+			width: `${CCTools.maxToggleButtonWidth}px`,
+			textAlign: 'right',
+			fontFamily: '"Merriweather", Georgia, serif'
+		};
+
+		// トグルボタンと入力ボックスの両方にスタイルを一括適用
+		[...toggleButtons, ...inputElements].forEach(el => Object.assign(el.style, sharedStyle));
 	}
 
 	CCTools.settingsLoaded = true;
 	
-	// UIを即座に反映させるため、もしオプション画面を開いていれば再描画
+	// オプション画面が開いている場合は再描画
 	if (Game.onMenu === 'prefs') {
 		Game.UpdateMenu();
 	}
