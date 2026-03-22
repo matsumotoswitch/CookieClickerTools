@@ -1,8 +1,8 @@
 // wrinkler.js
 (function() {
 	// ホットキー機能のON/OFFトグル設定
-	CCTools.addSetting('hotkeyWrinkler', '「W」キーで虫を一括駆除', 'toggle', true);
-	CCTools.addSetting('hotkeyShinyWrinkler', '「S」キーで虫を希少種に変換', 'toggle', true);
+	CCTools.addSetting('hotkeyWrinkler', '「W」キーで虫を一括駆除', 'toggle', true, null, { group: 'しわしわ虫 (Wrinkler)' });
+	CCTools.addSetting('hotkeyShinyWrinkler', '「S」キーで虫を希少種に変換', 'toggle', true, null, { group: 'しわしわ虫 (Wrinkler)' });
 
 	// キーボード入力の監視
 	document.addEventListener('keydown', (event) => {

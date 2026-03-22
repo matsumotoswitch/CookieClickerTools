@@ -8,7 +8,7 @@
 		if (CCTools.config['autoBigCookie']) {
 			startBigCookieClicker();
 		}
-	});
+	}, { group: '大クッキー (Big Cookie)' });
 
 	// 自動クリックのON/OFFトグル
 	CCTools.addSetting('autoBigCookie', '大クッキー自動クリック', 'toggle', true, (isActive) => {
@@ -17,7 +17,7 @@
 		} else {
 			stopBigCookieClicker();
 		}
-	});
+	}, { group: '大クッキー (Big Cookie)' });
 
 	/**
 	 * 大クッキーの自動クリックを開始する

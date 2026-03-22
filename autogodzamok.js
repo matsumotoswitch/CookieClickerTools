@@ -9,12 +9,12 @@
 		} else {
 			stopAutoGodzamok();
 		}
-	});
+	}, { group: '神殿 (Pantheon)' });
 
 	// 売買対象の施設リストとチェックボックスUIの生成
 	const targets = Object.keys(Game.Objects); // ゲーム内の全施設を自動取得
 	targets.forEach(name => {
-		CCTools.addSetting(`godzamok_${name}`, name, 'checkbox', name === 'Cursor' || name === 'Farm', null, { group: '売買対象' });
+		CCTools.addSetting(`godzamok_${name}`, name, 'checkbox', name === 'Cursor' || name === 'Farm', null, { group: '神殿 (Godzamok 売買対象)' });
 	});
 
 	function startAutoGodzamok() {

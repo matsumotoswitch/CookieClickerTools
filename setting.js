@@ -60,73 +60,72 @@
 		const container = document.getElementById('cctools-settings-container');
 		const toggleButtons = [];
 		const inputElements = [];
-		let currentFieldset = null;
 		let currentGroupName = null;
 
 		CCTools.settingsUI.forEach(setting => {
-			let targetContainer = container;
-
 			if (setting.group) {
 				if (currentGroupName !== setting.group) {
-					currentFieldset = document.createElement('fieldset');
-					currentFieldset.style.border = 'none';
-					currentFieldset.style.padding = '4px 8px 8px 8px';
-					currentFieldset.style.margin = '4px 0 8px 0';
-					const legend = document.createElement('legend');
+					const legend = document.createElement('div');
 					legend.textContent = setting.group;
 					legend.style.color = '#ccc';
-					legend.style.fontSize = '12px';
-					currentFieldset.appendChild(legend);
-					container.appendChild(currentFieldset);
+					legend.style.fontSize = '13px';
+					legend.style.fontWeight = 'bold';
+					legend.style.margin = '12px 0 4px 0';
+					container.appendChild(legend);
 					currentGroupName = setting.group;
 				}
-				targetContainer = currentFieldset;
 			} else {
-				currentFieldset = null;
 				currentGroupName = null;
 			}
 
 			if (setting.type === 'toggle') {
-				createToggleUI(setting, targetContainer, toggleButtons);
+				createToggleUI(setting, container, toggleButtons);
 			} else if (setting.type === 'number') {
-				createNumberUI(setting, targetContainer, inputElements);
+				createNumberUI(setting, container, inputElements);
 			} else if (setting.type === 'checkbox') {
-				createCheckboxUI(setting, targetContainer);
+				createCheckboxUI(setting, container);
 			} else if (setting.type === 'select') {
-				createSelectUI(setting, targetContainer, inputElements);
+				createSelectUI(setting, container, inputElements);
 			}
 		});
-		
-		alignElementWidths(toggleButtons, inputElements);
 	}
 
 	/**
 	 * トグルボタンコンポーネントを生成してDOMに追加します
 	 */
 	function createToggleUI(setting, container, toggleButtons) {
+		const div = document.createElement('div');
+		div.className = 'listing';
+		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px;';
+
 		const btn = document.createElement('a');
 		const isActive = CCTools.config[setting.id];
-		btn.className = isActive ? 'option prefButton on' : 'option prefButton off';
+		btn.className = isActive ? 'option on' : 'option off';
 		btn.innerText = setting.name + (isActive ? ' ON' : ' OFF');
+		btn.setAttribute('style', 'float: none !important; margin-right: 8px;');
 		
 		btn.onclick = function() {
 			CCTools.config[setting.id] = !CCTools.config[setting.id];
 			Game.UpdateMenu(); 
 			if (setting.callback) setting.callback(CCTools.config[setting.id]);
 		};
-		container.appendChild(btn);
 		toggleButtons.push(btn);
 		
 		const label = document.createElement('label');
 		label.textContent = ` ${setting.name}を有効/無効にします。`;
-		container.appendChild(label);
-		container.appendChild(document.createElement('br'));
+		div.appendChild(btn);
+		div.appendChild(label);
+		container.appendChild(div);
 	}
 
 	/**
 	 * 数値入力コンポーネントを生成してDOMに追加します
 	 */
 	function createNumberUI(setting, container, inputElements) {
+		const div = document.createElement('div');
+		div.className = 'listing';
+		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px;';
+
 		const input = document.createElement('input');
 		input.type = 'number';
 		input.value = CCTools.config[setting.id];
@@ -136,7 +135,7 @@
 		input.style.borderRadius = '3px';
 		input.style.background = '#111';
 		input.style.color = '#fff';
-		input.style.margin = '2px 4px 2px 0px';
+		input.style.margin = '2px 8px 2px 0px';
 		
 		input.onchange = function() {
 			let val = Number(input.value);
@@ -148,9 +147,9 @@
 		
 		const label = document.createElement('label');
 		label.textContent = ` ${setting.name}`;
-		container.appendChild(input);
-		container.appendChild(label);
-		container.appendChild(document.createElement('br'));
+		div.appendChild(input);
+		div.appendChild(label);
+		container.appendChild(div);
 		
 		inputElements.push(input);
 	}
@@ -160,11 +159,8 @@
 	 */
 	function createCheckboxUI(setting, container) {
 		const wrapper = document.createElement('div');
-		wrapper.style.display = 'inline-block';
-		wrapper.style.width = '172px';
-		wrapper.style.boxSizing = 'border-box';
-		wrapper.style.marginRight = '12px';
-		wrapper.style.padding = setting.group ? '2px 0' : '2px 0 2px 20px';
+		wrapper.className = 'listing';
+		wrapper.style.cssText = 'display: inline-flex; align-items: center; justify-content: flex-start; width: 172px; box-sizing: border-box; margin: 2px 12px 2px 0px; padding: 0;';
 
 		const input = document.createElement('input');
 		input.type = 'checkbox';
@@ -191,13 +187,17 @@
 	 * プルダウンコンポーネントを生成してDOMに追加します
 	 */
 	function createSelectUI(setting, container, inputElements) {
+		const div = document.createElement('div');
+		div.className = 'listing';
+		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px;';
+
 		const select = document.createElement('select');
 		select.style.padding = '2px 4px';
 		select.style.border = '1px solid #999';
 		select.style.borderRadius = '3px';
 		select.style.background = '#111';
 		select.style.color = '#fff';
-		select.style.margin = '2px 4px 2px 0px';
+		select.style.margin = '2px 8px 2px 0px';
 		
 		if (setting.selectOptions) {
 			setting.selectOptions.forEach(opt => {
@@ -218,34 +218,11 @@
 		
 		const label = document.createElement('label');
 		label.textContent = ` ${setting.name}`;
-		container.appendChild(select);
-		container.appendChild(label);
-		container.appendChild(document.createElement('br'));
+		div.appendChild(select);
+		div.appendChild(label);
+		container.appendChild(div);
 		
 		inputElements.push(select);
-	}
-
-	/**
-	 * 生成されたボタンや入力ボックスの幅を、最も広いものに合わせて統一します
-	 */
-	function alignElementWidths(toggleButtons, inputElements) {
-		if (toggleButtons.length === 0) return;
-
-		// 全ボタンの中から最大幅を取得し、ON/OFFの文字数変化に対応する余白を追加
-		const currentMax = Math.max(...toggleButtons.map(btn => btn.offsetWidth)) + 30;
-		// 過去の最大幅を記憶しておき、ボタンが短くなるのを防ぐ
-		CCTools.maxToggleButtonWidth = Math.max(CCTools.maxToggleButtonWidth || 0, currentMax);
-
-		// 共通のスタイル定義
-		const sharedStyle = {
-			boxSizing: 'border-box',
-			width: `${CCTools.maxToggleButtonWidth}px`,
-			textAlign: 'right',
-			fontFamily: '"Merriweather", Georgia, serif'
-		};
-
-		// トグルボタンと入力ボックスの両方にスタイルを一括適用
-		[...toggleButtons, ...inputElements].forEach(el => Object.assign(el.style, sharedStyle));
 	}
 
 	CCTools.settingsLoaded = true;

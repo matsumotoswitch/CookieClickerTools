@@ -9,7 +9,7 @@
 		} else {
 			stopFthofPredictor();
 		}
-	});
+	}, { group: '魔法塔 (Grimoire)' });
 
 	/**
 	 * 配列からランダムに要素を取得するヘルパー関数
