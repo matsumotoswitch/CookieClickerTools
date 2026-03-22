@@ -39,22 +39,3 @@ javascript:(function(){
 4. 登録したブックマークをクリックして実行します。
 5. 画面上部の「オプション（Options）」を開くと、一番下に「CCTools Settings」が追加されているので、そこから各機能の操作を行ってください。
 
-## 開発と拡張について
-
-本ツールはモジュール方式を採用しています。
-新しい機能を追加したい場合は、以下の手順で簡単に拡張できます。
-
-1. 新しい機能のJavaScriptファイル（例: `autobuyer.js`）を作成します。
-2. `CCTools.addSetting(id, name, type, defaultValue, callback)` APIを使用して、設定UIに項目を追加します。
-3. `main.js` の `modules` 配列に、作成したファイル名を追加します。
-
-**UI追加の例:**
-```javascript
-CCTools.addSetting('myNewFeature', '新しいチート機能', 'toggle', true, (isActive) => {
-    if (isActive) {
-        // 機能ON時の処理
-    } else {
-        // 機能OFF時の処理
-    }
-});
-```
