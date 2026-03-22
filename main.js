@@ -1,12 +1,14 @@
 // main.js
-if (!window.CCTools || !window.CCTools.init) {
+if (typeof window.CCTools === 'undefined' || typeof window.CCTools.init === 'undefined') {
 	window.CCTools = Object.assign(window.CCTools || {}, {
-		// 読み込むモジュールのリスト（後から新しい機能のjsファイルをここに追加します）
+		// 読み込むモジュールのリスト（後から autoclicker.js などをここに追加します）
 		modules: [
 			'setting.js',
 			'autoclicker.js',
 			'autogolden.js',
-			'fthof.js'
+			'fthof.js',
+			'autofortune.js',
+			'wrinkler.js'
 		],
 		
 		// 各ツールの設定値を保持するオブジェクト
