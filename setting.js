@@ -159,6 +159,8 @@
 	function createCheckboxUI(setting, container) {
 		const wrapper = document.createElement('div');
 		wrapper.style.display = 'inline-block';
+		wrapper.style.width = '180px';
+		wrapper.style.boxSizing = 'border-box';
 		wrapper.style.marginRight = '12px';
 		wrapper.style.padding = setting.group ? '2px 0' : '2px 0 2px 20px';
 
