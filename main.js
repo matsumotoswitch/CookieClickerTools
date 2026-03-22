@@ -8,7 +8,8 @@ if (typeof window.CCTools === 'undefined' || typeof window.CCTools.init === 'und
 			'autogolden.js',
 			'fthof.js',
 			'autofortune.js',
-			'wrinkler.js'
+			'wrinkler.js',
+			'automarket.js'
 		],
 		
 		// 各ツールの設定値を保持するオブジェクト
