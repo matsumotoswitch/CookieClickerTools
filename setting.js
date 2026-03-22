@@ -69,7 +69,7 @@
 			if (setting.group) {
 				if (currentGroupName !== setting.group) {
 					currentFieldset = document.createElement('fieldset');
-					currentFieldset.style.border = '1px solid #666';
+					currentFieldset.style.border = 'none';
 					currentFieldset.style.padding = '4px 8px 8px 8px';
 					currentFieldset.style.margin = '4px 0 8px 0';
 					const legend = document.createElement('legend');
@@ -92,6 +92,8 @@
 				createNumberUI(setting, targetContainer, inputElements);
 			} else if (setting.type === 'checkbox') {
 				createCheckboxUI(setting, targetContainer);
+			} else if (setting.type === 'select') {
+				createSelectUI(setting, targetContainer, inputElements);
 			}
 		});
 		
@@ -159,7 +161,7 @@
 	function createCheckboxUI(setting, container) {
 		const wrapper = document.createElement('div');
 		wrapper.style.display = 'inline-block';
-		wrapper.style.width = '180px';
+		wrapper.style.width = '172px';
 		wrapper.style.boxSizing = 'border-box';
 		wrapper.style.marginRight = '12px';
 		wrapper.style.padding = setting.group ? '2px 0' : '2px 0 2px 20px';
@@ -183,6 +185,44 @@
 		wrapper.appendChild(input);
 		wrapper.appendChild(label);
 		container.appendChild(wrapper);
+	}
+
+	/**
+	 * プルダウンコンポーネントを生成してDOMに追加します
+	 */
+	function createSelectUI(setting, container, inputElements) {
+		const select = document.createElement('select');
+		select.style.padding = '2px 4px';
+		select.style.border = '1px solid #999';
+		select.style.borderRadius = '3px';
+		select.style.background = '#111';
+		select.style.color = '#fff';
+		select.style.margin = '2px 4px 2px 0px';
+		
+		if (setting.selectOptions) {
+			setting.selectOptions.forEach(opt => {
+				const option = document.createElement('option');
+				option.value = opt.value;
+				option.textContent = opt.label;
+				if (String(CCTools.config[setting.id]) === String(opt.value)) {
+					option.selected = true;
+				}
+				select.appendChild(option);
+			});
+		}
+
+		select.onchange = function() {
+			CCTools.config[setting.id] = select.value;
+			if (setting.callback) setting.callback(select.value);
+		};
+		
+		const label = document.createElement('label');
+		label.textContent = ` ${setting.name}`;
+		container.appendChild(select);
+		container.appendChild(label);
+		container.appendChild(document.createElement('br'));
+		
+		inputElements.push(select);
 	}
 
 	/**
