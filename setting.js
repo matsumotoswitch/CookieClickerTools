@@ -13,13 +13,14 @@
 	 * @param {string} type - 'toggle' (ON/OFFボタン) など
 	 * @param {any} defaultValue - 初期値
 	 * @param {function} callback - 値が変更された時に呼ばれるコールバック
+	 * @param {object} options - その他のオプション (group など)
 	 */
-	CCTools.addSetting = function(id, name, type, defaultValue, callback) {
+	CCTools.addSetting = function(id, name, type, defaultValue, callback, options = {}) {
 		// 初期値が未設定の場合のみセットする（再読み込み時の状態維持のため）
 		if (typeof CCTools.config[id] === 'undefined') {
 			CCTools.config[id] = defaultValue;
 		}
-		CCTools.settingsUI.push({ id, name, type, callback });
+		CCTools.settingsUI.push(Object.assign({ id, name, type, callback }, options));
 	};
 
 	// クッキークリッカーの元のメニュー更新関数を退避
@@ -59,12 +60,38 @@
 		const container = document.getElementById('cctools-settings-container');
 		const toggleButtons = [];
 		const inputElements = [];
+		let currentFieldset = null;
+		let currentGroupName = null;
 
 		CCTools.settingsUI.forEach(setting => {
+			let targetContainer = container;
+
+			if (setting.group) {
+				if (currentGroupName !== setting.group) {
+					currentFieldset = document.createElement('fieldset');
+					currentFieldset.style.border = '1px solid #666';
+					currentFieldset.style.padding = '4px 8px 8px 8px';
+					currentFieldset.style.margin = '4px 0 8px 0';
+					const legend = document.createElement('legend');
+					legend.textContent = setting.group;
+					legend.style.color = '#ccc';
+					legend.style.fontSize = '12px';
+					currentFieldset.appendChild(legend);
+					container.appendChild(currentFieldset);
+					currentGroupName = setting.group;
+				}
+				targetContainer = currentFieldset;
+			} else {
+				currentFieldset = null;
+				currentGroupName = null;
+			}
+
 			if (setting.type === 'toggle') {
-				createToggleUI(setting, container, toggleButtons);
+				createToggleUI(setting, targetContainer, toggleButtons);
 			} else if (setting.type === 'number') {
-				createNumberUI(setting, container, inputElements);
+				createNumberUI(setting, targetContainer, inputElements);
+			} else if (setting.type === 'checkbox') {
+				createCheckboxUI(setting, targetContainer);
 			}
 		});
 		
@@ -124,6 +151,36 @@
 		container.appendChild(document.createElement('br'));
 		
 		inputElements.push(input);
+	}
+
+	/**
+	 * チェックボックスコンポーネントを生成してDOMに追加します
+	 */
+	function createCheckboxUI(setting, container) {
+		const wrapper = document.createElement('div');
+		wrapper.style.display = 'inline-block';
+		wrapper.style.marginRight = '12px';
+		wrapper.style.padding = setting.group ? '2px 0' : '2px 0 2px 20px';
+
+		const input = document.createElement('input');
+		input.type = 'checkbox';
+		input.checked = CCTools.config[setting.id];
+		input.style.margin = '0 6px 0 0';
+		input.style.verticalAlign = 'middle';
+		
+		input.onchange = () => {
+			CCTools.config[setting.id] = input.checked;
+			if (setting.callback) setting.callback(input.checked);
+		};
+		
+		const label = document.createElement('label');
+		label.textContent = setting.name;
+		label.style.verticalAlign = 'middle';
+		label.style.fontSize = '12px';
+		
+		wrapper.appendChild(input);
+		wrapper.appendChild(label);
+		container.appendChild(wrapper);
 	}
 
 	/**
