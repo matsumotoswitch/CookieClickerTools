@@ -9,7 +9,7 @@
 		} else {
 			stopAutoFortune();
 		}
-	}, { group: 'ニュースティッカー (News Ticker)' });
+	}, { group: '自動系' });
 
 	/**
 	 * フォーチュンクッキーの自動クリックを開始します。

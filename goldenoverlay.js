@@ -9,7 +9,7 @@
 		} else {
 			stopOverlay();
 		}
-	}, { group: '黄金クッキー (Golden Cookie)' });
+	}, { group: '表示系' });
 
 	/**
 	 * 画面上の黄金クッキー(shimmer)を監視し、確定している効果テキストをオーバーレイ表示します

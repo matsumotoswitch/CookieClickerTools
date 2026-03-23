@@ -60,33 +60,41 @@
 		const container = document.getElementById('cctools-settings-container');
 		const toggleButtons = [];
 		const inputElements = [];
-		let currentGroupName = null;
 
+		// 設定項目をグループごとにまとめる
+		const groupedSettings = {};
 		CCTools.settingsUI.forEach(setting => {
-			if (setting.group) {
-				if (currentGroupName !== setting.group) {
-					const legend = document.createElement('div');
-					legend.textContent = setting.group;
-					legend.style.color = '#ccc';
-					legend.style.fontSize = '13px';
-					legend.style.fontWeight = 'bold';
-					legend.style.margin = '12px 0 4px 0';
-					container.appendChild(legend);
-					currentGroupName = setting.group;
-				}
-			} else {
-				currentGroupName = null;
-			}
+			const group = setting.group || 'その他';
+			if (!groupedSettings[group]) groupedSettings[group] = [];
+			groupedSettings[group].push(setting);
+		});
 
-			if (setting.type === 'toggle') {
-				createToggleUI(setting, container, toggleButtons);
-			} else if (setting.type === 'number') {
-				createNumberUI(setting, container, inputElements);
-			} else if (setting.type === 'checkbox') {
-				createCheckboxUI(setting, container);
-			} else if (setting.type === 'select') {
-				createSelectUI(setting, container, inputElements);
-			}
+		// 表示するグループの順序を固定
+		const groupOrder = ['自動系', '表示系', '補助系', 'チート系', 'その他'];
+		const allGroups = Array.from(new Set([...groupOrder, ...Object.keys(groupedSettings)]));
+
+		allGroups.forEach(groupName => {
+			if (!groupedSettings[groupName] || groupedSettings[groupName].length === 0) return;
+
+			const legend = document.createElement('div');
+			legend.textContent = groupName;
+			legend.style.color = '#ccc';
+			legend.style.fontSize = '16px';
+			legend.style.fontWeight = 'bold';
+			legend.style.margin = '12px 0 4px 0';
+			container.appendChild(legend);
+
+			groupedSettings[groupName].forEach(setting => {
+				if (setting.type === 'toggle') {
+					createToggleUI(setting, container, toggleButtons);
+				} else if (setting.type === 'number') {
+					createNumberUI(setting, container, inputElements);
+				} else if (setting.type === 'checkbox') {
+					createCheckboxUI(setting, container);
+				} else if (setting.type === 'select') {
+					createSelectUI(setting, container, inputElements);
+				}
+			});
 		});
 	}
 
@@ -96,13 +104,13 @@
 	function createToggleUI(setting, container, toggleButtons) {
 		const div = document.createElement('div');
 		div.className = 'listing';
-		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px;';
+		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; position: relative; left: -16px;';
 
 		const btn = document.createElement('a');
 		const isActive = CCTools.config[setting.id];
 		btn.className = isActive ? 'option on' : 'option off';
 		btn.innerText = setting.name + (isActive ? ' ON' : ' OFF');
-		btn.setAttribute('style', 'float: none !important; margin-right: 8px;');
+		btn.setAttribute('style', 'float: none !important; margin-right: 8px; width: 250px; box-sizing: border-box; text-align: right;');
 		
 		btn.onclick = function() {
 			CCTools.config[setting.id] = !CCTools.config[setting.id];
@@ -124,18 +132,20 @@
 	function createNumberUI(setting, container, inputElements) {
 		const div = document.createElement('div');
 		div.className = 'listing';
-		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px;';
+		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; position: relative; left: -16px;';
 
 		const input = document.createElement('input');
 		input.type = 'number';
 		input.value = CCTools.config[setting.id];
-		input.style.width = '60px';
+		input.style.width = '250px';
+		input.style.boxSizing = 'border-box';
 		input.style.padding = '2px 4px';
 		input.style.border = '1px solid #999';
 		input.style.borderRadius = '3px';
 		input.style.background = '#111';
 		input.style.color = '#fff';
 		input.style.margin = '2px 8px 2px 0px';
+		input.style.textAlign = 'right';
 		
 		input.onchange = function() {
 			let val = Number(input.value);
@@ -189,15 +199,18 @@
 	function createSelectUI(setting, container, inputElements) {
 		const div = document.createElement('div');
 		div.className = 'listing';
-		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px;';
+		div.style.cssText = 'display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; position: relative; left: -16px;';
 
 		const select = document.createElement('select');
+		select.style.width = '250px';
+		select.style.boxSizing = 'border-box';
 		select.style.padding = '2px 4px';
 		select.style.border = '1px solid #999';
 		select.style.borderRadius = '3px';
 		select.style.background = '#111';
 		select.style.color = '#fff';
 		select.style.margin = '2px 8px 2px 0px';
+		select.style.textAlign = 'right';
 		
 		if (setting.selectOptions) {
 			setting.selectOptions.forEach(opt => {

@@ -5,12 +5,12 @@
 	// ゴールデンクッキー自動クリックのON/OFFトグル
 	CCTools.addSetting('autoGoldenCookie', 'ゴールデンクッキー自動クリック', 'toggle', true, (isActive) => {
 		updateShimmerClicker();
-	}, { group: '黄金クッキー (Golden Cookie)' });
+	}, { group: '自動系' });
 
 	// トナカイ自動クリックのON/OFFトグル
 	CCTools.addSetting('autoReindeer', 'トナカイ自動クリック', 'toggle', true, (isActive) => {
 		updateShimmerClicker();
-	}, { group: '黄金クッキー (Golden Cookie)' });
+	}, { group: '自動系' });
 
 	/**
 	 * 設定状態を監視し、ゴールデンクッキーまたはトナカイの自動クリッカーを起動/停止します。

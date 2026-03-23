@@ -138,15 +138,15 @@
 	}
 
 	// 農場関連の設定をUIに追加（グループ「農場 (Garden)」でまとめる）
-	CCTools.addSetting('autoWeeding', '雑草の自動駆除', 'toggle', true, updateAutoGardenState, { group: '農場 (Garden)' });
-	CCTools.addSetting('autoHarvestNew', '未解放の種の自動収穫', 'toggle', true, updateAutoGardenState, { group: '農場 (Garden)' });
-	CCTools.addSetting('autoHarvestDying', '枯れる直前の自動収穫', 'toggle', true, updateAutoGardenState, { group: '農場 (Garden)' });
-	CCTools.addSetting('autoPlant', '自動作付 (Auto-Plant)', 'toggle', false, updateAutoGardenState, { group: '農場 (Garden)' });
-	CCTools.addSetting('autoCrossbreed', '自動交配 (未取得の種を狙う)', 'toggle', false, updateAutoGardenState, { group: '農場 (Garden)' });
-	CCTools.addSetting('autoSoil', '土壌の自動切り替え (肥料⇔木屑)', 'toggle', false, updateAutoGardenState, { group: '農場 (Garden)' });
-	CCTools.addSetting('autoPlantLayout', '作付レイアウト', 'select', 'none', null, { group: '農場 (Garden)', selectOptions: layoutOptions });
-	CCTools.addSetting('autoPlantSeed1', '種1 (レイアウトの「1」)', 'select', '-1', null, { group: '農場 (Garden)', selectOptions: plantOptions });
-	CCTools.addSetting('autoPlantSeed2', '種2 (レイアウトの「2」)', 'select', '-1', null, { group: '農場 (Garden)', selectOptions: plantOptions });
+	CCTools.addSetting('autoWeeding', '雑草の自動駆除', 'toggle', true, updateAutoGardenState, { group: '自動系' });
+	CCTools.addSetting('autoHarvestNew', '未解放の種の自動収穫', 'toggle', true, updateAutoGardenState, { group: '自動系' });
+	CCTools.addSetting('autoHarvestDying', '枯れる直前の自動収穫', 'toggle', true, updateAutoGardenState, { group: '自動系' });
+	CCTools.addSetting('autoPlant', '自動作付 (Auto-Plant)', 'toggle', false, updateAutoGardenState, { group: '自動系' });
+	CCTools.addSetting('autoCrossbreed', '自動交配 (未取得の種を狙う)', 'toggle', false, updateAutoGardenState, { group: '自動系' });
+	CCTools.addSetting('autoSoil', '土壌の自動切り替え (肥料⇔木屑)', 'toggle', false, updateAutoGardenState, { group: '自動系' });
+	CCTools.addSetting('autoPlantLayout', '作付レイアウト', 'select', 'none', null, { group: '自動系', selectOptions: layoutOptions });
+	CCTools.addSetting('autoPlantSeed1', '種1 (レイアウトの「1」)', 'select', '-1', null, { group: '自動系', selectOptions: plantOptions });
+	CCTools.addSetting('autoPlantSeed2', '種2 (レイアウトの「2」)', 'select', '-1', null, { group: '自動系', selectOptions: plantOptions });
 
 	/**
 	 * ガーデンの状態をチェックし、条件に一致する植物を収穫・駆除します

@@ -11,7 +11,7 @@
 		} else {
 			stopAutoMarket();
 		}
-	}, { group: '銀行 (Stock Market)' });
+	}, { group: '自動系' });
 
 	function startAutoMarket() {
 		if (marketInterval) return;

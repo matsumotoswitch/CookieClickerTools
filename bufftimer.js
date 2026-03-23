@@ -9,9 +9,9 @@
 		} else {
 			stopBuffTimer();
 		}
-	}, { group: '全般 (General)' });
+	}, { group: '表示系' });
 
-	CCTools.addSetting('formatBuffTimer', 'バフ時間を分/時でフォーマット', 'toggle', true, null, { group: '全般 (General)' });
+	CCTools.addSetting('formatBuffTimer', 'バフ時間を分/時でフォーマット', 'toggle', true, null, { group: '表示系' });
 
 	function startBuffTimer() {
 		if (buffInterval) return;
