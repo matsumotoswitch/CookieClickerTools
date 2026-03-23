@@ -12,7 +12,8 @@ if (typeof window.CCTools === 'undefined' || typeof window.CCTools.init === 'und
 			'automarket.js',
 			'autogodzamok.js',
 			'autogarden.js',
-			'bufftimer.js'
+			'bufftimer.js',
+			'buy50.js'
 		],
 		
 		// 各ツールの設定値を保持するオブジェクト
