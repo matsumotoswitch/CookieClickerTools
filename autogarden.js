@@ -143,6 +143,7 @@
 	CCTools.addSetting('autoHarvestDying', '枯れる直前の自動収穫', 'toggle', true, updateAutoGardenState, { group: '農場 (Garden)' });
 	CCTools.addSetting('autoPlant', '自動作付 (Auto-Plant)', 'toggle', false, updateAutoGardenState, { group: '農場 (Garden)' });
 	CCTools.addSetting('autoCrossbreed', '自動交配 (未取得の種を狙う)', 'toggle', false, updateAutoGardenState, { group: '農場 (Garden)' });
+	CCTools.addSetting('autoSoil', '土壌の自動切り替え (肥料⇔木屑)', 'toggle', false, updateAutoGardenState, { group: '農場 (Garden)' });
 	CCTools.addSetting('autoPlantLayout', '作付レイアウト', 'select', 'none', null, { group: '農場 (Garden)', selectOptions: layoutOptions });
 	CCTools.addSetting('autoPlantSeed1', '種1 (レイアウトの「1」)', 'select', '-1', null, { group: '農場 (Garden)', selectOptions: plantOptions });
 	CCTools.addSetting('autoPlantSeed2', '種2 (レイアウトの「2」)', 'select', '-1', null, { group: '農場 (Garden)', selectOptions: plantOptions });
@@ -155,6 +156,9 @@
 		// ミニゲーム(ガーデン)が解放・ロードされていない場合はスキップ
 		if (!farm || !farm.minigameLoaded || !farm.minigame) return;
 		const M = farm.minigame;
+
+		let hasImmature = false;
+		let hasPlants = false;
 
 		// ガーデンは最大6x6のグリッド
 		for (let y = 0; y < 6; y++) {
@@ -169,6 +173,11 @@
 				// plantIdはプロットの値から-1したもの
 				const plant = M.plantsById[tile[0] - 1];
 				const age = tile[1];
+
+				hasPlants = true;
+				if (age < plant.mature) {
+					hasImmature = true;
+				}
 
 				// 1. 雑草の駆除 (Meddleweed, Crumbsporeなど weed プロパティがtrueのもの)
 				if (CCTools.config['autoWeeding'] && plant.weed) {
@@ -248,6 +257,29 @@
 							}
 						}
 					}
+				}
+			}
+		}
+
+		// 5. 土壌の自動切り替え (Fertilizer: 1, Woodchips: 4)
+		if (CCTools.config['autoSoil']) {
+			const fertilizer = M.soilsById[1];
+			const woodchips = M.soilsById[4];
+			
+			if (fertilizer && fertilizer.unlocked) {
+				let targetSoilId = M.soil;
+				
+				// 未成熟の作物がある、または全く生えていない時は「肥料(Fertilizer)」
+				if (hasImmature || !hasPlants) {
+					targetSoilId = 1; 
+				// 全て成熟しており、木屑がアンロックされていれば「木屑(Woodchips)」
+				} else if (!hasImmature && hasPlants && woodchips && woodchips.unlocked) {
+					targetSoilId = 4;
+				}
+				
+				if (M.soil !== targetSoilId) {
+					const soilEl = document.getElementById('farmSoil-' + targetSoilId);
+					if (soilEl) soilEl.click();
 				}
 			}
 		}
