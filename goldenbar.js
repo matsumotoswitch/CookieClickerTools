@@ -3,6 +3,7 @@
 	let barInterval = null;
 	let lastTime = -1;
 	let frozenCounter = 0;
+	let lastStatus = '';
 
 	CCTools.addSetting('showGoldenBar', '黄金クッキー出現予測ゲージ', 'toggle', true, (isActive) => {
 		if (isActive) {
@@ -36,7 +37,7 @@
 				margin: '10px auto',
 				position: 'relative',
 				zIndex: '100',
-				background: '#000',
+				background: 'rgba(0, 0, 0, 0.25)',
 				border: '1px solid #999',
 				borderRadius: '4px',
 				boxShadow: '0 0 4px #000',
@@ -45,29 +46,29 @@
 				textAlign: 'center',
 				fontSize: '12px',
 				color: '#fff',
-				textShadow: '1px 1px 2px #000'
+				transition: 'box-shadow 0.5s ease-out, border-color 0.5s ease-out, transform 0.3s ease-out, background-color 0.5s ease-out'
 			});
 
-			// 待機時間（絶対に出ない時間）の青ゲージ
+			// 待機時間（絶対に出ない時間）のゲージ
 			const barSafe = document.createElement('div');
 			barSafe.id = 'cctools-goldenbar-safe';
 			Object.assign(barSafe.style, {
 				height: '16px',
 				width: '0%',
-				background: '#4a90e2',
+				background: '#4a2e15',
 				position: 'absolute',
 				top: '2px',
 				zIndex: '1',
 				borderRadius: '2px'
 			});
 
-			// 警告時間（出る可能性がある時間）の赤ゲージ
+			// 警告時間（出る可能性がある時間）のゲージ
 			const barWarn = document.createElement('div');
 			barWarn.id = 'cctools-goldenbar-warn';
 			Object.assign(barWarn.style, {
 				height: '16px',
 				width: '0%',
-				background: '#e24a4a',
+				background: '#f4c542',
 				position: 'absolute',
 				top: '2px',
 				zIndex: '2',
@@ -78,12 +79,7 @@
 			// 重ねて表示するテキスト要素
 			const textEl = document.createElement('div');
 			textEl.id = 'cctools-goldenbar-text';
-			Object.assign(textEl.style, {
-				position: 'relative',
-				zIndex: '3',
-				lineHeight: '16px',
-				pointerEvents: 'none' // マウスクリックの邪魔にならないように
-			});
+			textEl.style.cssText = 'position: relative; z-index: 3; line-height: 16px; pointer-events: none; color: #fff !important; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000 !important;';
 
 			container.appendChild(barSafe);
 			container.appendChild(barWarn);
@@ -122,6 +118,7 @@
 			const warnRemainPercent = (Math.max(0, maxTime - Math.max(time, minTime)) / max) * 100;
 
 			// スタイルとテキストの更新
+			const container = document.getElementById('cctools-goldenbar-container');
 			const barSafe = document.getElementById('cctools-goldenbar-safe');
 			const barWarn = document.getElementById('cctools-goldenbar-warn');
 			const textEl = document.getElementById('cctools-goldenbar-text');
@@ -152,11 +149,33 @@
 					} else {
 						statusText = '警告';
 					}
-					if (barSafe) barSafe.style.background = '#4a90e2';
-					if (barWarn) barWarn.style.background = '#e24a4a';
+					if (barSafe) barSafe.style.background = '#4a2e15';
+					if (barWarn) barWarn.style.background = '#f4c542';
 				}
 
-				textEl.textContent = `黄金ｸｯｷｰ: あと ${remainMinText} 〜 ${remainMaxText} (${statusText})`;
+				// 状態が「待機」→「警告」に変わった瞬間にコンテナを光らせる
+				if (lastStatus === '待機' && statusText === '警告' && container) {
+					container.style.transition = 'none'; // 即座に光らせる
+					container.style.boxShadow = '0 0 40px 15px rgba(255, 215, 0, 1), inset 0 0 20px rgba(255, 255, 255, 0.8)';
+					container.style.borderColor = '#fff';
+					container.style.backgroundColor = 'rgba(255, 255, 200, 0.9)';
+					container.style.transform = 'scale(1.05)';
+					
+					// 少し待ってからフェードアウトさせる
+					setTimeout(() => {
+						if (container) {
+							container.style.transition = 'box-shadow 1.5s ease-out, border-color 1.5s ease-out, transform 0.8s ease-out, background-color 1.5s ease-out';
+							container.style.boxShadow = '0 0 4px #000';
+							container.style.borderColor = '#999';
+							container.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+							container.style.transform = 'scale(1)';
+						}
+					}, 50);
+				}
+				lastStatus = statusText;
+
+
+				textEl.textContent = `黄金クッキー: あと ${remainMinText} 〜 ${remainMaxText} (${statusText})`;
 			}
 		}, 100);
 	}
