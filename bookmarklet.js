@@ -1,5 +1,5 @@
 javascript:(function(){
-    var baseUrl = 'http://localhost:8080/';
+    var baseUrl = 'https://matsumotoswitch.github.io/CookieClickerTools/';
     window.CCTools = window.CCTools || {};
     window.CCTools.baseUrl = baseUrl;
 
