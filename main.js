@@ -14,7 +14,8 @@ if (typeof window.CCTools === 'undefined' || typeof window.CCTools.init === 'und
 			'autogarden.js',
 			'bufftimer.js',
 			'buy50.js',
-			'goldenbar.js'
+			'goldenbar.js',
+			'leveldown.js'
 		],
 		
 		// 各ツールの設定値を保持するオブジェクト
