@@ -11,7 +11,6 @@ if (typeof window.CCTools === 'undefined' || typeof window.CCTools.init === 'und
 			'wrinkler.js',
 			'automarket.js',
 			'autogodzamok.js',
-			'autogarden.js',
 			'bufftimer.js',
 			'buy50.js',
 			'goldenbar.js',
