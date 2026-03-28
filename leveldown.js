@@ -216,7 +216,7 @@
 					Game.storeToRefresh = 1; // 店舗UIの更新
 					Game.upgradesToRebuild = 1;
 					
-					Game.Notify('レベルダウン', `${obj.name}のレベルを下げ、角砂糖を ${returnedLumps} 個回収しました。`, obj.icon);
+					Game.Notify('レベルダウン', `${obj.name}のレベルを下げ、角砂糖を ${returnedLumps} 個回収しました。`, [typeof obj.iconColumn !== 'undefined' ? obj.iconColumn : id, 29]);
 					Game.PlaySound('snd/pop' + Math.floor(Math.random() * 3 + 1) + '.mp3'); // 軽い効果音
 				}
 			}
