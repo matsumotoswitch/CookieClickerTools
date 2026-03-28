@@ -2,6 +2,7 @@
 (function() {
 	// ホットキー機能のON/OFFトグル設定
 	CCTools.addSetting('hotkeyWrinkler', '「P」キーで虫を一括駆除', 'toggle', true, null, { group: '補助系' });
+	CCTools.addSetting('hotkeySpawnWrinkler', '「W」キーで虫を限界まで発生', 'toggle', true, null, { group: 'チート系' });
 	CCTools.addSetting('hotkeyShinyWrinkler', '「S」キーで虫を希少種に変換', 'toggle', true, null, { group: 'チート系' });
 
 	// キーボード入力の監視
@@ -31,8 +32,23 @@
 					}
 				}
 				if (count > 0) {
-					Game.Notify('希少種変換完了', `${count}匹のしわしわ虫を希少種に変換しました！`, '', 2);
+					Game.Notify('希少種変換完了', `${count}匹のしわしわ虫を希少種に変換しました！`, [24, 12], 2);
 				}
+			}
+		}
+
+		// 押されたキーが 'w' または 'W' の場合
+		if ((event.key === 'w' || event.key === 'W') && CCTools.config['hotkeySpawnWrinkler']) {
+			let count = 0;
+			// 現在の虫の最大出現可能数を取得して、その回数だけ発生を試みる
+			const max = typeof Game.getWrinklersMax === 'function' ? Game.getWrinklersMax() : 12;
+			for (let i = 0; i < max; i++) {
+				if (Game.SpawnWrinkler()) { // ゲーム標準の虫発生関数を実行
+					count++;
+				}
+			}
+			if (count > 0) {
+				Game.Notify('虫発生', `しわしわ虫を${count}匹召喚しました。`, [19, 8], 2);
 			}
 		}
 	});
