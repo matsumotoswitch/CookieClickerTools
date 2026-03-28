@@ -11,8 +11,6 @@
 		}
 	}, { group: '表示系' });
 
-	CCTools.addSetting('formatBuffTimer', 'バフ時間を分/時でフォーマット', 'toggle', true, null, { group: '表示系' });
-
 	function startBuffTimer() {
 		if (buffInterval) return;
 		
@@ -50,14 +48,10 @@
 					const totalSeconds = Math.max(0, Math.ceil(buff.time / effectiveFps));
 					let timeText = '';
 					
-					if (CCTools.config['formatBuffTimer']) {
-						if (totalSeconds >= 3600) {
-							timeText = Math.floor(totalSeconds / 3600) + 'h' + Math.floor((totalSeconds % 3600) / 60) + 'm';
-						} else if (totalSeconds >= 60) {
-							timeText = Math.floor(totalSeconds / 60) + 'm' + String(totalSeconds % 60).padStart(2, '0') + 's';
-						} else {
-							timeText = totalSeconds + 's';
-						}
+					if (totalSeconds >= 3600) {
+						timeText = Math.floor(totalSeconds / 3600) + 'h' + Math.floor((totalSeconds % 3600) / 60) + 'm';
+					} else if (totalSeconds >= 60) {
+						timeText = Math.floor(totalSeconds / 60) + 'm' + String(totalSeconds % 60).padStart(2, '0') + 's';
 					} else {
 						timeText = totalSeconds + 's';
 					}
