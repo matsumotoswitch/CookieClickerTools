@@ -1,7 +1,7 @@
 // wrinkler.js
 (function() {
 	// ホットキー機能のON/OFFトグル設定
-	CCTools.addSetting('hotkeyWrinkler', '「W」キーで虫を一括駆除', 'toggle', true, null, { group: '補助系' });
+	CCTools.addSetting('hotkeyWrinkler', '「P」キーで虫を一括駆除', 'toggle', true, null, { group: '補助系' });
 	CCTools.addSetting('hotkeyShinyWrinkler', '「S」キーで虫を希少種に変換', 'toggle', true, null, { group: 'チート系' });
 
 	// キーボード入力の監視
@@ -11,8 +11,8 @@
 			return;
 		}
 
-		// 押されたキーが 'w' または 'W' の場合
-		if ((event.key === 'w' || event.key === 'W') && CCTools.config['hotkeyWrinkler']) {
+		// 押されたキーが 'p' または 'P' の場合
+		if ((event.key === 'p' || event.key === 'P') && CCTools.config['hotkeyWrinkler']) {
 			if (typeof Game.CollectWrinklers === 'function') {
 				Game.CollectWrinklers(); // ゲーム標準の一括駆除関数を実行
 				Game.Notify('虫駆除完了', 'すべてのしわしわ虫を退治しました！', '', 2);
